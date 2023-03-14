@@ -1,50 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const primaryColor = '#1a1a2e';
 const textColor = '#fff';
 const linkHoverColor = '#007bff';
 
 const NavbarContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: ${primaryColor};
+  background-color: blue;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
 
-  @media screen and (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-`;
-
-const Logo = styled.h1`
-  font-family: 'Montserrat', sans-serif;
-  font-size: 36px;
-  font-weight: bold;
-  color: ${textColor};
-  margin-bottom: 1rem;
-
-  @media screen and (min-width: 768px) {
-    margin-bottom: 0;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-
-  @media screen and (min-width: 768px) {
-    flex-direction: row;
-  }
 `;
 
 const commonLinkStyles = `
-  margin: 0.5rem;
+  margin: 0 0.5rem;
   color: ${textColor};
   text-decoration: none;
   font-size: 16px;
@@ -57,38 +37,63 @@ const commonLinkStyles = `
 const NavLink = styled.a`
   ${commonLinkStyles}
 
-  @media screen and (min-width: 768px) {
-    margin-left: 1rem;
+  @media screen and (max-width: 768px) {
+    margin-top: 0.5rem;
   }
 `;
 
 const SearchBar = styled.input`
+  height: 30px;
+  padding: 5px 10px;
+  border-radius: 5px;
   border: none;
-  padding: 10px;
-  font-size: 16px;
-  margin-top: 1rem;
+  margin-right: 10px;
+  width: 550px;
+`;
 
-  &:focus {
-    outline: none;
-  }
-
-  @media screen and (min-width: 768px) {
-    margin-top: 0;
-    margin-left: 1rem;
+const SearchButton = styled.button`
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  background-color: ${linkHoverColor};
+  color: ${textColor};
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  &:hover {
+    background-color: #0062cc;
   }
 `;
 
 function Navbar() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = () => {
+    // Send a request to the API with the search term as a filter
+    fetch(`https://api.noroff.dev/api/v1/online-shop/items?category=${searchTerm}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
   return (
     <NavbarContainer>
-      <Logo>E-Com</Logo>
       <NavLinks>
         <NavLink href="#">Home</NavLink>
         <NavLink href="#">Product</NavLink>
         <NavLink href="#">Cart</NavLink>
         <NavLink href="#">Checkout</NavLink>
       </NavLinks>
-      <SearchBar type="text" placeholder="Search" />
+      <div>
+        <SearchBar
+          type="text"
+          placeholder="Search category"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <SearchButton onClick={handleSearch}>Search</SearchButton>
+      </div>
     </NavbarContainer>
   );
 }

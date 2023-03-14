@@ -60,10 +60,27 @@ const Button = styled.button`
   }
 `;
 
+const SearchBar = styled.input`
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 1rem;
+
+  &:focus {
+    outline: none;
+  }
+
+  @media screen and (min-width: 768px) {
+    margin-top: 0;
+    margin-left: 1rem;
+  }
+`;
+
 function Home() {
   return (
     <>
       <h2>Welcome to our store!</h2>
+      <SearchBar type="text" placeholder="Search" />
       <CenteredContainer>
         <GridContainer>
           <FeaturedItem>
