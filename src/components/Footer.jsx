@@ -24,8 +24,7 @@ function Footer() {
   return (
     <FooterContainer>
       <FooterHeader>E-Commerce Store</FooterHeader>
-      <FooterText>123 Main St, Anytown USA</FooterText>
-      <FooterText>info@ecommercestore.com</FooterText>
+      <FooterText>Design by: NeNorvalls</FooterText>
     </FooterContainer>
   );
 }
