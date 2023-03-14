@@ -1,32 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const primaryColor = '#1a1a2e';
-
-const NavbarContainer = styled.div`
- 
-   background-color: ${primaryColor};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60px;
-`;
-
-const Logo = styled.h1`
-  color: white;
-  font-size: 24px;
-  text-align: center;
-  margin: 0;
-  @media screen and (max-width: 768px) {
-    font-size: 20px;
-  }
-`;
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Navbar } from 'react-bootstrap';
 
 function NavbarLogo() {
   return (
-    <NavbarContainer>
-      <Logo>E-Commerce Store</Logo>
-    </NavbarContainer>
+    <Navbar bg="dark" variant="dark" className="justify-content-center align-items-center">
+      <Navbar.Brand>E-Commerce Store</Navbar.Brand>
+    </Navbar>
   );
 }
 

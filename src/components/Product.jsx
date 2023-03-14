@@ -1,49 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const Card = styled.div`
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 2px #e6e6e6;
-  margin: 10px;
-  padding: 10px;
-  width: 300px;
-`;
-
-const Image = styled.img`
-  display: block;
-  height: 200px;
-  margin: 0 auto;
-  object-fit: cover;
-  width: 100%;
-`;
-
-const Title = styled.h3`
-  font-size: 1.2rem;
-  margin: 10px 0;
-`;
-
-const Description = styled.p`
-  margin: 10px 0;
-`;
-
-const Price = styled.p`
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 10px 0;
-`;
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Card, Image, Button } from 'react-bootstrap';
 
 const Product = () => {
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(15);
 
   useEffect(() => {
-    fetch('https://api.noroff.dev/api/v1/online-shop/products')
+    fetch('https://api.noroff.dev/api/v1/online-shop')
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -60,17 +25,45 @@ const Product = () => {
       .catch(error => console.error(error));
   }, []);
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const renderProducts = currentProducts.map(product => (
+    <Card key={product.id} className="m-3 shadow" style={{ width: '18rem' }}>
+      <Image src={product.image_url} alt={product.title} fluid className="p-3" />
+      <Card.Body>
+        <Card.Title>{product.title}</Card.Title>
+        <Card.Text>{product.description}</Card.Text>
+        <Button variant="primary">${product.price}</Button>
+      </Card.Body>
+    </Card>
+  ));
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const renderPageNumbers = pageNumbers.map(number => (
+    <li key={number} className="page-item">
+      <a href="!#" className="page-link" onClick={() => setCurrentPage(number)}>
+        {number}
+      </a>
+    </li>
+  ));
+
   return (
-    <Container>
-      {products.map(product => (
-        <Card key={product.id}>
-          <Image src={product.image_url} alt={product.title} />
-          <Title>{product.title}</Title>
-          <Description>{product.description}</Description>
-          <Price>${product.price}</Price>
-        </Card>
-      ))}
-    </Container>
+    <>
+      <Container fluid className="d-flex flex-wrap justify-content-center">
+        {renderProducts}
+      </Container>
+      <nav>
+        <ul className="pagination justify-content-center">
+          {renderPageNumbers}
+        </ul>
+      </nav>
+    </>
   );
 };
 
